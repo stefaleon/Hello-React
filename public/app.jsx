@@ -3,7 +3,7 @@ const GreeterMessages = React.createClass({
         return (
             <div>
                 <h1>Ohai {this.props.name}!</h1>
-                {this.props.message}
+                <h2>{this.props.message}</h2>
             </div>
         );
     }
@@ -13,19 +13,30 @@ const GreeterMessages = React.createClass({
 const GreeterForm = React.createClass({
     onFormSubmit: function (e) {
         e.preventDefault();
+        var newData={};
         console.log('in GreeterForm-onFormSubmit, this.refs.name.value is:', this.refs.name.value);
-        // act on click only if input is not empty
+        console.log('in GreeterForm-onFormSubmit, this.refs.message.value is:', this.refs.message.value);
+        // do not act on click if no data have been typed in
         if (this.refs.name.value.length > 0) {
-            this.props.onNewName(this.refs.name.value);
+            newData.name = this.refs.name.value;
         }
-        // clear form after input text has been used
+        if (this.refs.message.value.length > 0) {
+            newData.message = this.refs.message.value;
+        }
+        // call onNewData with the newData object argument
+        this.props.onNewData(newData);
+        // clear form after inputs have been used
         this.refs.name.value = '';
+        this.refs.message.value = '';
     },
     render: function() {
         return (
             <form onSubmit={this.onFormSubmit}>
-                <input type="text" ref="name" />
-                <input type="submit" value="Set Name"/>
+                <input type="text" ref="name" placeholder="Enter name"/>
+                <br />
+                <textarea ref="message" placeholder="Enter message"></textarea>
+                <br />
+                <input type="submit" value="Submit"/>
             </form>
         );
     }
@@ -39,17 +50,14 @@ const Greeter = React.createClass({
             message: this.props.message
         };
     },
-    handleNewName: function (newName) {
-        this.setState({
-            name: newName,
-            message: 'Wohooo, the name is changed to ' + newName + '!'
-        });
+    handleNewData: function (newData) {
+        this.setState(newData);
     },
     render: function() {
         return (
             <div>
                 <GreeterMessages name={this.state.name} message={this.state.message} />
-                <GreeterForm onNewName={this.handleNewName} />
+                <GreeterForm onNewData={this.handleNewData} />
             </div>
         );
     }
