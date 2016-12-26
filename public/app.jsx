@@ -1,4 +1,4 @@
-const GreeterMessage = React.createClass({
+const GreeterMessages = React.createClass({
     render: function() {
         return (
             <div>
@@ -35,18 +35,20 @@ const GreeterForm = React.createClass({
 const Greeter = React.createClass({
     getInitialState: function () {
         return {
-            name: this.props.name
+            name: this.props.name,
+            message: this.props.message
         };
     },
     handleNewName: function (newName) {
         this.setState({
-            name: newName
+            name: newName,
+            message: 'Wohooo, the name is changed to ' + newName + '!'
         });
     },
     render: function() {
         return (
             <div>
-                <GreeterMessage name={this.state.name} message={this.props.message} />
+                <GreeterMessages name={this.state.name} message={this.state.message} />
                 <GreeterForm onNewName={this.handleNewName} />
             </div>
         );
